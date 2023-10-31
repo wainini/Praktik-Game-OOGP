@@ -1,16 +1,26 @@
 class Enemy
 {
-    private string name;
-    public int atkDamage;
-    private int maxHP;
-    private int currentHP;
+    public string Name { get; private set; }
+    public int Damage { get; private set; }
+    public int MaxHP { get; private set; }
+    public int CurrentHP { get; private set; }
 
-    public Enemy(string pName, int pAtkDamage, int pMaxHP)
+    public Enemy(string name, int damage, int maxHP)
     {
-        name = pName;
-        atkDamage = pAtkDamage;
-        maxHP = pMaxHP;
+        Name = name;
+        Damage = damage;
+        MaxHP = CurrentHP = maxHP;
+    }
 
-        currentHP = maxHP;
+    public string Attack(Player player)
+    {
+        player.TakeDamage(Damage);
+
+        return $"{Name} did {Damage} damage to you!";
+    }
+
+    public void TakeDamage(int damage)
+    {
+        CurrentHP = Math.Clamp(CurrentHP - damage, 0, MaxHP);
     }
 }

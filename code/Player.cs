@@ -1,54 +1,26 @@
 class Player
 {
-    private string name;
-    public int atkDamage;
-    private int maxHP;
-    private int currentHP;
+    public string Name { get; private set; }
+    public int Damage { get; private set; }
+    public int MaxHP { get; private set; }
+    public int CurrentHP { get; private set; }
 
-    //auto-properties
-    //public int AtkDamage{ get; }
-
-    //properties
-    public string Name
+    public Player(string name, int damage, int maxHP)
     {
-        get { return name; }
+        Name = name;
+        Damage = damage;
+        MaxHP = CurrentHP = maxHP;
     }
 
-    public int MaxHP
+    public string Attack(Enemy enemy)
     {
-        get { return maxHP; }
-        set 
-        { 
-            if (value > 0)
-            {
-                maxHP = value;
-            }
-            else
-            {
-                maxHP = 1;
-            } 
+        enemy.TakeDamage(Damage);
 
-            if(currentHP > maxHP){
-                currentHP = maxHP;
-            }
-        }
-    }
-
-    public Player(string pName, int pAtkDamage, int pMaxHP)
-    {
-        name = pName;
-        atkDamage = pAtkDamage;
-        maxHP = pMaxHP;
-
-        currentHP = maxHP;
+        return $"You did {Damage} damage to {enemy.Name}!";
     }
 
     public void TakeDamage(int damage)
     {
-        currentHP = Math.Clamp(currentHP - damage, 0, int.MaxValue);
-    }
-    public void Attack()
-    {
-        Console.WriteLine($"My damage is {atkDamage}");
+        CurrentHP = Math.Clamp(CurrentHP - damage, 0, MaxHP);
     }
 }

@@ -1,0 +1,14 @@
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\bin\Debug\net7.0\Praktik-Game-OOGP.exe
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\bin\Debug\net7.0\Praktik-Game-OOGP.deps.json
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\bin\Debug\net7.0\Praktik-Game-OOGP.runtimeconfig.json
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\bin\Debug\net7.0\Praktik-Game-OOGP.dll
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\bin\Debug\net7.0\Praktik-Game-OOGP.pdb
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\obj\Debug\net7.0\Praktik-Game-OOGP.GeneratedMSBuildEditorConfig.editorconfig
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\obj\Debug\net7.0\Praktik-Game-OOGP.AssemblyInfoInputs.cache
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\obj\Debug\net7.0\Praktik-Game-OOGP.AssemblyInfo.cs
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\obj\Debug\net7.0\Praktik-Game-OOGP.csproj.CoreCompileInputs.cache
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\obj\Debug\net7.0\Praktik-Game-OOGP.dll
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\obj\Debug\net7.0\refint\Praktik-Game-OOGP.dll
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\obj\Debug\net7.0\Praktik-Game-OOGP.pdb
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\obj\Debug\net7.0\Praktik-Game-OOGP.genruntimeconfig.cache
+C:\!Kuliah\!BGDC\Kelas OOGP\Praktik-Game-OOGP\obj\Debug\net7.0\ref\Praktik-Game-OOGP.dll
