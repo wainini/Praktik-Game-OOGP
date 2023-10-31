@@ -16,7 +16,8 @@ class Game
         MainMenu();
         PlayerCreationMenu();
 
-        while (player.CurrentHP != 0)
+
+        while (player.CurrentHP != 0) //loop game until player dies
         {
             BattleMenu(); //PlayerTurn
             WriteTurnReport();
@@ -25,6 +26,10 @@ class Game
             EnemyTurn();
             WriteTurnReport();
             Console.ReadLine();
+
+            if(enemy.CurrentHP == 0){
+                enemy = new("Bob", enemy.Damage+1, enemy.MaxHP+5);
+            }
         }
     }
 
