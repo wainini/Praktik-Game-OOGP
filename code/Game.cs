@@ -121,12 +121,11 @@ class Game
                 turnReport = player.Attack(enemy);
                 break;
             case 2:
+                turnReport = player.CastSkill("Fireball", player);
                 break;
             case 3:
                 break;
         }
-
-
     }
 
     private void EnemyTurn()
@@ -134,10 +133,11 @@ class Game
         Console.Clear();
         Console.WriteLine($"{enemy.Name} readies an attack..");
         Console.ReadLine();
-        turnReport = enemy.Attack(player);
+        turnReport = enemy.Attack(enemy);
     }
 
     private void WriteTurnReport(){
         Console.WriteLine(turnReport);
     }
+
 }

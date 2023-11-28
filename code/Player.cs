@@ -1,26 +1,27 @@
-class Player
+class Player : Entity
 {
-    public string Name { get; private set; }
-    public int Damage { get; private set; }
-    public int MaxHP { get; private set; }
-    public int CurrentHP { get; private set; }
-
-    public Player(string name, int damage, int maxHP)
+    public List<Skill> skills = new List<Skill>()
     {
-        Name = name;
-        Damage = damage;
-        MaxHP = CurrentHP = maxHP;
+        new Skill("Haste", "You cast haste on "),
+        new Skill("Fireball", "You cast fireball towards ")
+    };
+
+    public Player(string name, int damage, int maxHP) : base(name, damage, maxHP)
+    {
+
     }
 
-    public string Attack(Enemy enemy)
+    public string CastSkill(string skillName, Entity target)
     {
-        enemy.TakeDamage(Damage);
+        Skill s = skills.Find((x) => x.Name == skillName);
 
-        return $"You did {Damage} damage to {enemy.Name}!";
-    }
-
-    public void TakeDamage(int damage)
-    {
-        CurrentHP = Math.Clamp(CurrentHP - damage, 0, MaxHP);
+        if (s == null)
+        {
+            return "Skill not found, you failed casting the skill";
+        }
+        else
+        {
+            return s.TextWhenSkillCasted + target.Name;
+        }
     }
 }
