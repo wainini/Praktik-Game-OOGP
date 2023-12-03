@@ -1,9 +1,9 @@
 class Player : Entity
 {
-    public List<Skill> skills = new List<Skill>()
+    private List<Skill> skills = new List<Skill>()
     {
-        new Skill("Haste", "You cast haste on "),
-        new Skill("Fireball", "You cast fireball towards ")
+        new Fireball(),
+        new Rage()
     };
 
     public Player(string name, int damage, int maxHP) : base(name, damage, maxHP)
@@ -11,9 +11,13 @@ class Player : Entity
 
     }
 
-    public string CastSkill(string skillName, Entity target)
+    public List<Skill> GetSkills(){
+        return skills;
+    }
+
+    public string CastSkill(int index, Entity target)
     {
-        Skill s = skills.Find((x) => x.Name == skillName);
+        Skill s = skills[index-1];
 
         if (s == null)
         {
@@ -21,7 +25,7 @@ class Player : Entity
         }
         else
         {
-            return s.TextWhenSkillCasted + target.Name;
+            return s.Activate(this, target);
         }
     }
 }

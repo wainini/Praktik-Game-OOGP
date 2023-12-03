@@ -19,16 +19,19 @@ class Game
 
         while (player.CurrentHP != 0) //loop game until player dies
         {
+            player.CheckBuffs();
             BattleMenu(); //PlayerTurn
             WriteTurnReport();
             Console.ReadLine();
 
+            enemy.CheckBuffs();
             EnemyTurn();
             WriteTurnReport();
             Console.ReadLine();
 
-            if(enemy.CurrentHP == 0){
-                enemy = new("Bob", enemy.Damage+1, enemy.MaxHP+5);
+            if (enemy.CurrentHP == 0)
+            {
+                enemy = new("Bob", enemy.Damage + 1, enemy.MaxHP + 5);
             }
         }
     }
@@ -121,11 +124,52 @@ class Game
                 turnReport = player.Attack(enemy);
                 break;
             case 2:
-                turnReport = player.CastSkill("Fireball", player);
+                SkillMenu();
                 break;
             case 3:
                 break;
         }
+    }
+
+    private void SkillMenu()
+    {
+        int input = 0;
+        List<Skill> playerSkills = player.GetSkills();
+        do
+        {
+            Console.Clear();
+
+            for (int i = 0; i < playerSkills.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {playerSkills[i].Name}");
+            }
+            Console.Write("Choose a skill: ");
+
+            if (!int.TryParse(Console.ReadLine(), out input))
+            {
+                input = -1;
+            }
+        }
+        while (input < 1 || input > playerSkills.Count);
+
+        int targetInput = 0;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine($"1. {enemy.Name}(Enemy)");
+            Console.WriteLine($"2. {player.Name}(Player)");
+            Console.Write("Choose a target: ");
+
+            if (!int.TryParse(Console.ReadLine(), out targetInput))
+            {
+                targetInput = -1;
+            }
+        }
+        while (targetInput < 1 || targetInput > 2);
+
+        Entity target = targetInput == 1 ? enemy : player;
+
+        turnReport = player.CastSkill(input, target);
     }
 
     private void EnemyTurn()
@@ -133,10 +177,11 @@ class Game
         Console.Clear();
         Console.WriteLine($"{enemy.Name} readies an attack..");
         Console.ReadLine();
-        turnReport = enemy.Attack(enemy);
+        turnReport = enemy.Attack(player);
     }
 
-    private void WriteTurnReport(){
+    private void WriteTurnReport()
+    {
         Console.WriteLine(turnReport);
     }
 
