@@ -8,11 +8,13 @@ class GameManager
 {
     public Player Player { get; private set; }
     public Enemy Enemy { get; private set; }
+    public GameState CurrentState { get; private set; }
+    public String TurnReport{ get; private set; }
 
     private int firstEnemyDamage = 7;
     private int firstEnemyHP = 35;
 
-    public GameState CurrentState { get; private set; }
+
 
     public GameManager()
     {
@@ -65,5 +67,19 @@ class GameManager
         if(Player.CurrentHP == 0){
             Environment.Exit(0);
         }
+    }
+
+    public void EnemyAttack()
+    {
+        TurnReport = Enemy.Attack(Player);
+    }
+
+    public void PlayerAttack(){
+        TurnReport = Player.Attack(Enemy);
+    }
+
+    public void PlayerCastSkill(int index, Entity target)
+    {
+        TurnReport = Player.CastSkill(index, target);
     }
 }

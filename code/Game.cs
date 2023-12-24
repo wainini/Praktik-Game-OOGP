@@ -117,7 +117,7 @@ class Game
                 Console.Clear();
                 Console.WriteLine("You readies an attack..");
                 Console.ReadLine();
-                turnReport = manager.Player.Attack(manager.Enemy);
+                manager.PlayerAttack();
                 break;
             case 2:
                 SkillMenu();
@@ -165,7 +165,7 @@ class Game
 
         Entity target = targetInput == 1 ? manager.Enemy : manager.Player;
 
-        turnReport = manager.Player.CastSkill(input, target);
+        manager.PlayerCastSkill(input, target);
     }
 
     private void EnemyTurn()
@@ -173,12 +173,12 @@ class Game
         Console.Clear();
         Console.WriteLine($"{manager.Enemy.Name} readies an attack..");
         Console.ReadLine();
-        turnReport = manager.Enemy.Attack(manager.Player);
+        manager.EnemyAttack();
     }
 
     private void WriteTurnReport()
     {
-        Console.WriteLine(turnReport);
+        Console.WriteLine(manager.TurnReport);
     }
 
 }
