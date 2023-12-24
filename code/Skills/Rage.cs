@@ -5,6 +5,7 @@ class Rage : Skill
         Name = "Rage";
         Damage = 0;
         Buff = new DamageBonus(3, 4);
+        SelfCast = true;
     }
 
     public override string Activate(Entity caster, Entity target)
@@ -13,4 +14,5 @@ class Rage : Skill
 
         return $"{target.Name} is angry, it's attack increases";
     }
+
 }

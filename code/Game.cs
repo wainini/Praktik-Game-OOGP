@@ -1,7 +1,6 @@
 class Game
 {
-    private Player player;
-    private Enemy enemy;
+    public GameManager manager;
     private string turnReport;
 
 
@@ -12,26 +11,26 @@ class Game
 
     private Game()
     {
-        enemy = new Enemy("Bob", 7, 35);
+        manager = new GameManager();
+        manager.NewBattle();
         MainMenu();
         PlayerCreationMenu();
 
-
-        while (player.CurrentHP != 0) //loop game until player dies
+        while (manager.Player.CurrentHP != 0) //loop game until player dies
         {
-            player.CheckBuffs();
             BattleMenu(); //PlayerTurn
             WriteTurnReport();
             Console.ReadLine();
+            manager.SwitchTurn();
 
-            enemy.CheckBuffs();
             EnemyTurn();
             WriteTurnReport();
             Console.ReadLine();
+            manager.SwitchTurn();
 
-            if (enemy.CurrentHP == 0)
+            if (manager.Enemy.CurrentHP == 0)
             {
-                enemy = new("Bob", enemy.Damage + 1, enemy.MaxHP + 5);
+                manager.NewBattle();
             }
         }
     }
@@ -77,7 +76,7 @@ class Game
         }
         while (name == null || name.Length < 3 || name.Length > 12);
 
-        player = new Player(name, 10, 100);
+        manager.NewPlayer(new Player(name, 10, 100));
     }
 
     private void BattleMenu()
@@ -87,19 +86,19 @@ class Game
         {
             #region Data Player & Enemy
             Console.Clear();
-            Console.Write(enemy.Name.CenterString(20));
+            Console.Write(manager.Enemy.Name.CenterString(20));
             Console.Write("|");
-            Console.WriteLine(player.Name.CenterString(20));
+            Console.WriteLine(manager.Player.Name.CenterString(20));
 
             Console.WriteLine("".PadLeft(41, '='));
 
-            Console.Write($"HP: {enemy.CurrentHP}/{enemy.MaxHP}".PadRight(20));
+            Console.Write($"HP: {manager.Enemy.CurrentHP}/{manager.Enemy.MaxHP}".PadRight(20));
             Console.Write("|");
-            Console.WriteLine($"HP: {player.CurrentHP}/{player.MaxHP}".PadRight(20));
+            Console.WriteLine($"HP: {manager.Player.CurrentHP}/{manager.Player.MaxHP}".PadRight(20));
 
-            Console.Write($"ATK: {enemy.Damage}".PadRight(20));
+            Console.Write($"ATK: {manager.Enemy.Damage}".PadRight(20));
             Console.Write("|");
-            Console.WriteLine($"ATK: {player.Damage}".PadRight(20));
+            Console.WriteLine($"ATK: {manager.Player.Damage}".PadRight(20));
             #endregion
 
             Console.WriteLine("".PadLeft(41, '='));
@@ -121,7 +120,7 @@ class Game
                 Console.Clear();
                 Console.WriteLine("You readies an attack..");
                 Console.ReadLine();
-                turnReport = player.Attack(enemy);
+                turnReport = manager.Player.Attack(manager.Enemy);
                 break;
             case 2:
                 SkillMenu();
@@ -134,8 +133,8 @@ class Game
     private void SkillMenu()
     {
         int input = 0;
-        List<Skill> playerSkills = player.GetSkills();
-        do
+        List<Skill> playerSkills = manager.Player.GetSkills();
+        do //List semua skill yang dimiliki player
         {
             Console.Clear();
 
@@ -153,11 +152,11 @@ class Game
         while (input < 1 || input > playerSkills.Count);
 
         int targetInput = 0;
-        do
+        do //List semua available target
         {
             Console.Clear();
-            Console.WriteLine($"1. {enemy.Name}(Enemy)");
-            Console.WriteLine($"2. {player.Name}(Player)");
+            Console.WriteLine($"1. {manager.Enemy.Name}(Enemy)");
+            Console.WriteLine($"2. {manager.Player.Name}(Player)");
             Console.Write("Choose a target: ");
 
             if (!int.TryParse(Console.ReadLine(), out targetInput))
@@ -167,17 +166,17 @@ class Game
         }
         while (targetInput < 1 || targetInput > 2);
 
-        Entity target = targetInput == 1 ? enemy : player;
+        Entity target = targetInput == 1 ? manager.Enemy : manager.Player;
 
-        turnReport = player.CastSkill(input, target);
+        turnReport = manager.Player.CastSkill(input, target);
     }
 
     private void EnemyTurn()
     {
         Console.Clear();
-        Console.WriteLine($"{enemy.Name} readies an attack..");
+        Console.WriteLine($"{manager.Enemy.Name} readies an attack..");
         Console.ReadLine();
-        turnReport = enemy.Attack(player);
+        turnReport = manager.Enemy.Attack(manager.Player);
     }
 
     private void WriteTurnReport()

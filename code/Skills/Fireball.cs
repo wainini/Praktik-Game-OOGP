@@ -5,6 +5,7 @@ class Fireball : Skill
         Name = "Fireball";
         Damage = 5;
         Buff = null;
+        SelfCast = false;
     }
 
     public override string Activate(Entity caster, Entity target)
