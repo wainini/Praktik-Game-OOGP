@@ -55,5 +55,15 @@ class GameManager
             Player.CheckBuffs();
             CurrentState = GameState.PlayerTurn;
         }
+        CheckAlive();
+    }
+
+    private void CheckAlive(){
+        if(Enemy.CurrentHP == 0){
+            NewBattle();
+        }
+        if(Player.CurrentHP == 0){
+            Environment.Exit(0);
+        }
     }
 }

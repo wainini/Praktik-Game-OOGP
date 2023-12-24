@@ -18,20 +18,17 @@ class Game
 
         while (manager.Player.CurrentHP != 0) //loop game until player dies
         {
-            BattleMenu(); //PlayerTurn
+            switch(manager.CurrentState){
+                case GameState.PlayerTurn:
+                    BattleMenu();
+                    break;
+                case GameState.EnemyTurn:
+                    EnemyTurn();
+                    break;
+            }        
             WriteTurnReport();
             Console.ReadLine();
             manager.SwitchTurn();
-
-            EnemyTurn();
-            WriteTurnReport();
-            Console.ReadLine();
-            manager.SwitchTurn();
-
-            if (manager.Enemy.CurrentHP == 0)
-            {
-                manager.NewBattle();
-            }
         }
     }
 
