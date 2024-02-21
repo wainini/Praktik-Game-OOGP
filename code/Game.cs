@@ -3,7 +3,6 @@ class Game
     public GameManager manager;
     private string turnReport;
 
-
     public static void Main(String[] args)
     {
         _ = new Game();
@@ -16,6 +15,10 @@ class Game
         MainMenu();
         PlayerCreationMenu();
 
+        GameLoop();      
+    }
+
+    private void GameLoop(){
         while (manager.Player.CurrentHP != 0) //loop game until player dies
         {
             switch(manager.CurrentState){
@@ -26,8 +29,7 @@ class Game
                     EnemyTurn();
                     break;
             }        
-            WriteTurnReport();
-            Console.ReadLine();
+            WriteTurnReports();
             manager.SwitchTurn();
         }
     }
@@ -115,8 +117,6 @@ class Game
         {
             case 1:
                 Console.Clear();
-                Console.WriteLine("You readies an attack..");
-                Console.ReadLine();
                 manager.PlayerAttack();
                 break;
             case 2:
@@ -165,20 +165,21 @@ class Game
 
         Entity target = targetInput == 1 ? manager.Enemy : manager.Player;
 
+        Console.Clear();
         manager.PlayerCastSkill(input, target);
     }
 
     private void EnemyTurn()
     {
         Console.Clear();
-        Console.WriteLine($"{manager.Enemy.Name} readies an attack..");
-        Console.ReadLine();
         manager.EnemyAttack();
     }
 
-    private void WriteTurnReport()
+    private void WriteTurnReports()
     {
-        Console.WriteLine(manager.TurnReport);
+        foreach(string s in manager.TurnReports.ToArray()){
+            Console.WriteLine(manager.TurnReports.Dequeue());
+            Console.ReadLine();
+        }
     }
-
 }

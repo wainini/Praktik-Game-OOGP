@@ -5,8 +5,9 @@ class Skill
     public Buff Buff { get; protected set; }
     public bool SelfCast { get; protected set;}
 
-    public virtual string Activate(Entity caster, Entity target)
+    public virtual Queue<string> Activate(Entity caster, Entity target)
     {
-        return "";
+        Queue<string> turnReports = new(new string[]{ "", "" }) ;
+        return turnReports;
     }
 }

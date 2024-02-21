@@ -8,11 +8,14 @@ class Rage : Skill
         SelfCast = true;
     }
 
-    public override string Activate(Entity caster, Entity target)
+    public override Queue<string> Activate(Entity caster, Entity target)
     {
+        Queue<string> turnReports = new(new string[]{"You starts to chant an ancient spell [Rage]..", 
+                                $"{target.Name} is angry, it's attack increases"}) ;
+
         target.AddBuff(Buff);
 
-        return $"{target.Name} is angry, it's attack increases";
+        return turnReports;
     }
 
 }

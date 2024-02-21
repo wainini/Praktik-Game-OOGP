@@ -9,7 +9,7 @@ class GameManager
     public Player Player { get; private set; }
     public Enemy Enemy { get; private set; }
     public GameState CurrentState { get; private set; }
-    public String TurnReport{ get; private set; }
+    public Queue<string> TurnReports { get; private set; } = new();
 
     private int firstEnemyDamage = 7;
     private int firstEnemyHP = 35;
@@ -71,15 +71,17 @@ class GameManager
 
     public void EnemyAttack()
     {
-        TurnReport = Enemy.Attack(Player);
+        TurnReports.Enqueue($"{Enemy.Name} readies an attack..");
+        TurnReports.Enqueue(Enemy.Attack(Player));
     }
 
     public void PlayerAttack(){
-        TurnReport = Player.Attack(Enemy);
+        TurnReports.Enqueue("You ready an attack..");
+        TurnReports.Enqueue(Player.Attack(Player));
     }
 
     public void PlayerCastSkill(int index, Entity target)
     {
-        TurnReport = Player.CastSkill(index, target);
+        TurnReports = Player.CastSkill(index, target);
     }
 }

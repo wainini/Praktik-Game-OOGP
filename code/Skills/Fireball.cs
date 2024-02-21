@@ -8,12 +8,18 @@ class Fireball : Skill
         SelfCast = false;
     }
 
-    public override string Activate(Entity caster, Entity target)
+    public override Queue<string> Activate(Entity caster, Entity target)
     {
+        Queue<string> turnReports = new();
+
+        turnReports.Enqueue("A ball of fire starts to conjure in your palm. You hurl it towards the enemy..");
+
         int totalDamage = Damage + caster.Damage;
 
         target.TakeDamage(totalDamage);
 
-        return $"The fire engulf {target.Name}, dealing {totalDamage} damage";
+        turnReports.Enqueue($"The fire engulf {target.Name}, dealing {totalDamage} damage");
+
+        return turnReports;
     }
 }

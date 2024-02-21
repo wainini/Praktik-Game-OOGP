@@ -15,13 +15,15 @@ class Player : Entity
         return skills;
     }
 
-    public string CastSkill(int index, Entity target)
+    public Queue<string> CastSkill(int index, Entity target)
     {
         Skill s = skills[index-1];
 
         if (s == null)
         {
-            return "Skill not found, you failed casting the skill";
+            Queue<string> turnReports = new();
+            turnReports.Enqueue("Skill not found, you failed casting the skill");
+            return turnReports;
         }
         else
         {
