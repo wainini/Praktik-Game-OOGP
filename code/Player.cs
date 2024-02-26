@@ -1,5 +1,7 @@
 class Player : Entity
 {
+    public Dictionary<Item, int> Inventory { get; private set; }
+
     private List<Skill> skills = new List<Skill>()
     {
         new Fireball(),
@@ -8,7 +10,7 @@ class Player : Entity
 
     public Player(string name, int damage, int maxHP) : base(name, damage, maxHP)
     {
-
+        Inventory = new();
     }
 
     public List<Skill> GetSkills(){
@@ -28,6 +30,28 @@ class Player : Entity
         else
         {
             return s.Activate(this, target);
+        }
+    }
+
+    public void AddItem(Item item, int amount){
+        if(Inventory.ContainsKey(item)){
+            Inventory[item] += amount;
+        }
+        else{
+            Inventory.Add(item, amount);
+        }
+    }
+
+    public void RemoveItem(Item item, int amount){
+        if (!Inventory.ContainsKey(item)) return; //guard clause
+
+        if (Inventory[item] < amount) return;
+
+        else if(Inventory[item] == amount){
+            Inventory.Remove(item);
+        }
+        else{
+            Inventory[item] -= amount;
         }
     }
 }

@@ -15,13 +15,15 @@ class Game
         MainMenu();
         PlayerCreationMenu();
 
-        GameLoop();      
+        GameLoop();
     }
 
-    private void GameLoop(){
+    private void GameLoop()
+    {
         while (manager.Player.CurrentHP != 0) //loop game until player dies
         {
-            switch(manager.CurrentState){
+            switch (manager.CurrentState)
+            {
                 case GameState.PlayerTurn:
                     BattleMenu();
                     break;
@@ -32,7 +34,7 @@ class Game
                     manager.NewBattle();
                     Console.Clear();
                     WriteTurnReports();
-                    continue;   
+                    continue;
             }
             WriteTurnReports();
             manager.SwitchTurn();
@@ -128,8 +130,40 @@ class Game
                 SkillMenu();
                 break;
             case 3:
+                InventoryMenu();
                 break;
         }
+    }
+
+    private void InventoryMenu()
+    {
+        int input = 0;
+        Dictionary<Item, int> playerInventory = manager.Player.Inventory;
+        
+        if(playerInventory.Count == 0){
+            Console.Clear();
+            Console.WriteLine("You have no item in your inventory");
+            Console.ReadLine();
+            return;
+        }
+
+        do //List semua item yang dimiliki player
+        {
+            Console.Clear();
+            int number = 1;
+            foreach (KeyValuePair<Item, int> item in playerInventory)
+            {
+                Console.WriteLine($"{number}. {item.Key.Name} x{item.Value}");
+                number++;
+            }
+            Console.Write("Choose an item: ");
+
+            if (!int.TryParse(Console.ReadLine(), out input))
+            {
+                input = -1;
+            }
+        }
+        while (input < 1 || input > playerInventory.Count);
     }
 
     private void SkillMenu()
@@ -182,7 +216,8 @@ class Game
 
     private void WriteTurnReports()
     {
-        foreach(string s in manager.TurnReports.ToArray()){
+        foreach (string s in manager.TurnReports.ToArray())
+        {
             Console.WriteLine(manager.TurnReports.Dequeue());
             Console.ReadLine();
         }

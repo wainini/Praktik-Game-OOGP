@@ -101,6 +101,7 @@ class GameManager
             int randomNum = rand.Next(1, 101);
             if(randomNum <= item.Value){
                 TurnReports.Enqueue($"You've obtained {item.Key.Name}!");
+                Player.AddItem(item.Key, 1);
                 doesItemDrop = true;
             }
         }
