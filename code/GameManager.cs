@@ -1,7 +1,8 @@
 public enum GameState
 {
     PlayerTurn,
-    EnemyTurn
+    EnemyTurn,
+    BattleEnd
 }
 
 class GameManager
@@ -33,7 +34,7 @@ class GameManager
         NewEnemy();
     }
 
-    public void NewEnemy()
+    private void NewEnemy()
     {
         if (Enemy == null) //null apabila ini adalah enemy pertama
         {
@@ -61,12 +62,18 @@ class GameManager
     }
 
     private void CheckAlive(){
-        if(Enemy.CurrentHP == 0){
-            NewBattle();
+        if(Enemy.CurrentHP <= 0){
+            EndBattle();
         }
-        if(Player.CurrentHP == 0){
+        if(Player.CurrentHP <= 0){
             Environment.Exit(0);
         }
+    }
+
+    private void EndBattle(){
+        CurrentState = GameState.BattleEnd;
+        TurnReports.Enqueue($"You've slain {Enemy.Name}");
+        GetEnemyDrop();
     }
 
     public void EnemyAttack()
@@ -77,11 +84,29 @@ class GameManager
 
     public void PlayerAttack(){
         TurnReports.Enqueue("You ready an attack..");
-        TurnReports.Enqueue(Player.Attack(Player));
+        TurnReports.Enqueue(Player.Attack(Enemy));
     }
 
     public void PlayerCastSkill(int index, Entity target)
     {
         TurnReports = Player.CastSkill(index, target);
+    }
+
+    private void GetEnemyDrop(){
+        Random rand = new Random();
+
+        bool doesItemDrop = false;
+
+        foreach(KeyValuePair<Item, int> item in Enemy.ItemDropPool){
+            int randomNum = rand.Next(1, 101);
+            if(randomNum <= item.Value){
+                TurnReports.Enqueue($"You've obtained {item.Key.Name}!");
+                doesItemDrop = true;
+            }
+        }
+
+        if(!doesItemDrop){
+            TurnReports.Enqueue($"There's nothing worth taking from {Enemy.Name}'s corpse");
+        }
     }
 }

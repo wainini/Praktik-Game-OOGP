@@ -28,7 +28,12 @@ class Game
                 case GameState.EnemyTurn:
                     EnemyTurn();
                     break;
-            }        
+                case GameState.BattleEnd:
+                    manager.NewBattle();
+                    Console.Clear();
+                    WriteTurnReports();
+                    continue;   
+            }
             WriteTurnReports();
             manager.SwitchTurn();
         }
@@ -181,5 +186,6 @@ class Game
             Console.WriteLine(manager.TurnReports.Dequeue());
             Console.ReadLine();
         }
+        manager.TurnReports.Clear();
     }
 }

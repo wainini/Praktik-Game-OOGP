@@ -25,6 +25,7 @@ class Entity
             damage = value;
         }
     }
+    
     public int MaxHP { get; private set; }
     public int CurrentHP { get; private set; }
 
