@@ -3,6 +3,8 @@ class Game
     public GameManager manager;
     private string turnReport;
 
+    private bool switchTurn;
+
     public static void Main(String[] args)
     {
         _ = new Game();
@@ -22,6 +24,7 @@ class Game
     {
         while (manager.Player.CurrentHP != 0) //loop game until player dies
         {
+            switchTurn = false;
             switch (manager.CurrentState)
             {
                 case GameState.PlayerTurn:
@@ -35,9 +38,14 @@ class Game
                     Console.Clear();
                     WriteTurnReports();
                     continue;
+                case GameState.InShop:
+                    ShopMenu();
+                    continue;
             }
             WriteTurnReports();
-            manager.SwitchTurn();
+
+            if(switchTurn)
+                manager.SwitchTurn();
         }
     }
 
@@ -125,6 +133,7 @@ class Game
             case 1:
                 Console.Clear();
                 manager.PlayerAttack();
+                switchTurn = true;
                 break;
             case 2:
                 SkillMenu();
@@ -151,6 +160,7 @@ class Game
         {
             Console.Clear();
             int number = 1;
+            Console.WriteLine($"0. Cancel");
             foreach (KeyValuePair<Item, int> item in playerInventory)
             {
                 Console.WriteLine($"{number}. {item.Key.Name} x{item.Value}");
@@ -163,7 +173,11 @@ class Game
                 input = -1;
             }
         }
-        while (input < 1 || input > playerInventory.Count);
+        while (input < 0 || input > playerInventory.Count);
+
+        if (input == 0) return;
+
+        switchTurn = true;
     }
 
     private void SkillMenu()
@@ -174,6 +188,7 @@ class Game
         {
             Console.Clear();
 
+            Console.WriteLine($"0. Cancel");
             for (int i = 0; i < playerSkills.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {playerSkills[i].Name}");
@@ -185,12 +200,16 @@ class Game
                 input = -1;
             }
         }
-        while (input < 1 || input > playerSkills.Count);
+        while (input < 0 || input > playerSkills.Count);
+
+        if(input == 0) return;
+        
 
         int targetInput = 0;
         do //List semua available target
         {
             Console.Clear();
+            Console.WriteLine($"0. Cancel");
             Console.WriteLine($"1. {manager.Enemy.Name}(Enemy)");
             Console.WriteLine($"2. {manager.Player.Name}(Player)");
             Console.Write("Choose a target: ");
@@ -200,18 +219,181 @@ class Game
                 targetInput = -1;
             }
         }
-        while (targetInput < 1 || targetInput > 2);
+        while (targetInput < 0 || targetInput > 2);
+
+        if (targetInput == 0) return;
 
         Entity target = targetInput == 1 ? manager.Enemy : manager.Player;
 
         Console.Clear();
         manager.PlayerCastSkill(input, target);
+        switchTurn = true;
     }
 
     private void EnemyTurn()
     {
         Console.Clear();
         manager.EnemyAttack();
+        switchTurn = true;
+    }
+
+    private void ShopMenu(){
+        int input = 0;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to The Shop");
+            Console.WriteLine($"You have {manager.Player.GetGold()}g");
+            Console.WriteLine("====================");
+            Console.WriteLine("0. Exit Shop");
+            Console.WriteLine("1. Buy");
+            Console.WriteLine("2. Sell");
+            Console.WriteLine("3. Heal");
+            Console.Write("Choose an option: ");
+
+            if (!int.TryParse(Console.ReadLine(), out input))
+            {
+                input = -1;
+            }
+        }
+        while (input < 0 && input > 3);
+
+        switch (input)
+        {
+            case 0:
+                manager.NewBattle();
+                break;
+            case 1:
+                BuyMenu();
+                break;
+            case 2:
+                SellMenu();
+                break;
+            case 3:
+                HealMenu();
+                break;
+        }
+    }
+
+    private void BuyMenu(){
+        int input = 0;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("You want to buy something?");
+            Console.WriteLine($"You have {manager.Player.GetGold()}g");
+            Console.WriteLine("====================");
+            //randomize something
+            Console.WriteLine("0. Cancel");
+            Console.WriteLine("1. Dummy item 1");
+            Console.WriteLine("2. Dummy item 2");
+            Console.WriteLine("3. Dummy item 3");
+            Console.Write("Choose an option: ");
+
+            if (!int.TryParse(Console.ReadLine(), out input))
+            {
+                input = -1;
+            }
+        }
+        while (input < 0 || input > 3);
+
+        if (input == 0) return;
+    }
+
+    private void SellMenu(){
+        int input = 0;
+
+        Dictionary<Item, int> playerInventory = manager.Player.Inventory;
+
+        KeyValuePair<Item, int> itemToSell;
+
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("What do you have?");
+            Console.WriteLine($"You have {manager.Player.GetGold()}g");
+            Console.WriteLine("====================");
+            Console.WriteLine("0. Cancel");
+
+            int number = 1;
+            foreach (KeyValuePair<Item, int> item in playerInventory)
+            {
+                Console.WriteLine($"{number}. {item.Key.Name} x{item.Value}   {item.Key.SellPrice}g/ea");
+                number++;
+            }
+            Console.Write("Choose an option: ");
+
+            if (!int.TryParse(Console.ReadLine(), out input))
+            {
+                input = -1;
+            }
+        }
+        while (input < 0 || input > 3);
+
+        if (input == 0) return;
+        else
+            itemToSell = playerInventory.ElementAt(input-1);
+
+
+        do
+        {
+            Console.Clear();
+            Console.WriteLine($"[{itemToSell.Key.Name}] is {itemToSell.Key.SellPrice}g/ea");
+            Console.WriteLine($"You have {itemToSell.Value} [{itemToSell.Key.Name}]");
+            Console.WriteLine("====================");
+            Console.WriteLine("0. Cancel");
+            Console.Write("How many do you want to sell: ");
+
+            if (!int.TryParse(Console.ReadLine(), out input))
+            {
+                input = -1;
+            }
+        }
+        while (input < 0 || input > itemToSell.Value);
+
+        if (input == 0) return;
+
+        int totalGold = itemToSell.Key.SellPrice * input;
+        manager.Player.AddGold(totalGold);
+        manager.Player.RemoveItem(itemToSell.Key, input);
+
+        Console.Clear();
+        Console.WriteLine($"You've sold {input} [{itemToSell.Key.Name}] for {totalGold}g");
+        Console.ReadLine();
+    }
+
+    private void HealMenu(){
+        int input = 0;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("I can heal you to full for 50g");
+            Console.WriteLine($"You have {manager.Player.GetGold()}g");
+            Console.WriteLine("====================");
+            Console.WriteLine("0. Cancel");
+            Console.WriteLine("1. Okay, sure!");
+            Console.Write("Choose an option: ");
+
+            if (!int.TryParse(Console.ReadLine(), out input))
+            {
+                input = -1;
+            }
+        }
+        while (input < 0 || input > 1);
+
+        if (input == 0) return;
+
+        if (manager.Player.TrySubtractGold(50))
+        {
+            manager.Player.TakeDamage(-manager.Player.MaxHP);
+            Console.Clear();
+            Console.WriteLine("I've healed you to full!");
+        }
+        else{
+            Console.Clear();
+            Console.WriteLine("I don't think you have enough Gold to afford that");
+            Console.ReadLine();
+        }
     }
 
     private void WriteTurnReports()

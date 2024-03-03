@@ -2,7 +2,8 @@ public enum GameState
 {
     PlayerTurn,
     EnemyTurn,
-    BattleEnd
+    BattleEnd,
+    InShop
 }
 
 class GameManager
@@ -12,14 +13,15 @@ class GameManager
     public GameState CurrentState { get; private set; }
     public Queue<string> TurnReports { get; private set; } = new();
 
-    private int firstEnemyDamage = 7;
-    private int firstEnemyHP = 35;
+    private int baseNumOfBattle = 2;
+    private int currentNumOfBattle;
 
-
+    private int enemyStatPool = 45;
+    private int enemyStatIncrease = 10;
 
     public GameManager()
     {
-
+        currentNumOfBattle = baseNumOfBattle;
     }
 
     public void NewPlayer(Player player)
@@ -30,20 +32,24 @@ class GameManager
 
     public void NewBattle()
     {
-        CurrentState = GameState.PlayerTurn;
-        NewEnemy();
+        if(currentNumOfBattle == 0){
+            CurrentState = GameState.InShop;
+            currentNumOfBattle = baseNumOfBattle;
+        }
+        else{
+            CurrentState = GameState.PlayerTurn;
+            NewEnemy();
+        }
     }
 
     private void NewEnemy()
     {
-        if (Enemy == null) //null apabila ini adalah enemy pertama
-        {
-            Enemy = new Enemy("Bob", firstEnemyDamage, firstEnemyHP);
-        }
-        else
-        {
-            Enemy = new Enemy("Bob", Enemy.Damage + 1, Enemy.MaxHP + 5);
-        }
+        Random rand = new Random();
+
+        int randomHP = rand.Next((int)Math.Floor(enemyStatPool * 0.20f), (int)Math.Floor(enemyStatPool * 0.75f));
+        int damage = enemyStatPool - randomHP;
+
+        Enemy = new Enemy("Bob", damage, randomHP);
     }
 
     public void SwitchTurn()
@@ -74,6 +80,9 @@ class GameManager
         CurrentState = GameState.BattleEnd;
         TurnReports.Enqueue($"You've slain {Enemy.Name}");
         GetEnemyDrop();
+
+        currentNumOfBattle--;
+        enemyStatPool += enemyStatIncrease;
     }
 
     public void EnemyAttack()
@@ -110,4 +119,6 @@ class GameManager
             TurnReports.Enqueue($"There's nothing worth taking from {Enemy.Name}'s corpse");
         }
     }
+
+    
 }

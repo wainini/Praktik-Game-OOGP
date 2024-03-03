@@ -1,7 +1,7 @@
 class Player : Entity
 {
     public Dictionary<Item, int> Inventory { get; private set; }
-
+    private int gold = 0;
     private List<Skill> skills = new List<Skill>()
     {
         new Fireball(),
@@ -52,6 +52,24 @@ class Player : Entity
         }
         else{
             Inventory[item] -= amount;
+        }
+    }
+
+    public int GetGold(){
+        return gold;
+    }
+
+    public void AddGold(int amount){
+        gold += amount;
+    }
+
+    public bool TrySubtractGold(int amount){
+        if(gold < amount){
+            return false;
+        }
+        else{
+            gold -= amount;
+            return true;
         }
     }
 }
