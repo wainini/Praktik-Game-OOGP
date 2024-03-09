@@ -1,6 +1,7 @@
 class Player : Entity
 {
     public Dictionary<Item, int> Inventory { get; private set; }
+    
     private int gold = 0;
     private List<Skill> skills = new List<Skill>()
     {

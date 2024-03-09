@@ -7,10 +7,14 @@ class Item{
         SellPrice = sellPrice;
     }
 
+    public virtual void Use(Entity target){
+
+    }
+
     public static List<Item> ItemDatabase = new(
         new Item[]{
-            new Item("Sword", 10),
-            new Item("Shield", 8)
+            new Sword(),
+            new Dagger()
         }
     );
 }

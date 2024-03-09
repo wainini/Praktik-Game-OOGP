@@ -16,7 +16,7 @@ class Enemy : Entity
 
     private void RandomizeDropPool(){
         ItemDropPool = new();
-        ItemDropPool.Add(Item.ItemDatabase.Find((i) => i.Name == "Sword"), 50);
-        ItemDropPool.Add(Item.ItemDatabase.Find((i) => i.Name == "Shield"), 50);
+        ItemDropPool.Add(Item.ItemDatabase.Find((i) => i is Sword), 50);
+        ItemDropPool.Add(Item.ItemDatabase.Find((i) => i is Dagger), 50);
     }
 }

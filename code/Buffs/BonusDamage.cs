@@ -1,6 +1,6 @@
 class DamageBonus : Buff
 {
-    private int bonusDamage;
+    protected int bonusDamage;
 
     public DamageBonus(int duration, int bonusDamage)
     {

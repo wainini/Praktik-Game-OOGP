@@ -177,6 +177,8 @@ class Game
 
         if (input == 0) return;
 
+        playerInventory.Keys.ToList()[input - 1].Use(manager.Player);
+
         switchTurn = true;
     }
 
@@ -317,7 +319,7 @@ class Game
 
             int number = 1;
             foreach (KeyValuePair<Item, int> item in playerInventory)
-            {
+            {               
                 Console.WriteLine($"{number}. {item.Key.Name} x{item.Value}   {item.Key.SellPrice}g/ea");
                 number++;
             }

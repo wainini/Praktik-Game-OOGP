@@ -4,7 +4,7 @@ class Rage : Skill
     {
         Name = "Rage";
         Damage = 0;
-        Buff = new DamageBonus(3, 4);
+        Buffs.Add(new RageBuff(3, 4));
         SelfCast = true;
     }
 
@@ -13,9 +13,16 @@ class Rage : Skill
         Queue<string> turnReports = new(new string[]{"You starts to chant an ancient spell [Rage]..", 
                                 $"{target.Name} is angry, it's attack increases"}) ;
 
-        target.AddBuff(Buff);
-
+        target.AddBuffs(Buffs);
         return turnReports;
+    }
+}
+
+class RageBuff : DamageBonus
+{
+    public RageBuff(int duration, int bonusDamage) : base(duration, bonusDamage)
+    {
+
     }
 
 }

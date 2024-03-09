@@ -1,7 +1,7 @@
 class Entity
 {
     private int damage;
-
+    public Equipments equipments { get; private set; } = new();
     public string Name { get; private set; }
     public int Damage
     {
@@ -36,6 +36,7 @@ class Entity
         Name = name;
         Damage = damage;
         MaxHP = CurrentHP = maxHP;
+        equipments.entity = this;
     }
 
     public virtual string Attack(Entity target)
@@ -50,9 +51,23 @@ class Entity
         CurrentHP = Math.Clamp(CurrentHP - damage, 0, MaxHP);
     }
 
+    public void AddBuffs(List<Buff> buffs)
+    {
+        foreach(Buff b in buffs){
+            AddBuff(b);
+        }
+    }
+
     public void AddBuff(Buff buff)
     {
         buffList.Add(buff);
+    }
+
+    public void RemoveBuffs(List<Buff> buffs)
+    {
+        foreach(Buff b in buffs){
+            RemoveBuff(b);
+        }
     }
 
     public void RemoveBuff(Buff buff)
@@ -66,7 +81,7 @@ class Entity
         {
             b.Activate();
 
-            if (b.RemainingDuration <= 0)
+            if (b.RemainingDuration == 0)
             {
                 RemoveBuff(b);
             }

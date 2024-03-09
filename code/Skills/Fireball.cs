@@ -4,7 +4,7 @@ class Fireball : Skill
     {
         Name = "Fireball";
         Damage = 5;
-        Buff = null;
+        Buffs = null;
         SelfCast = false;
     }
 

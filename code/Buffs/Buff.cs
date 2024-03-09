@@ -7,7 +7,9 @@ class Buff
 
     public virtual string Activate()
     {
-        RemainingDuration--;
+        if (RemainingDuration != -1){
+            RemainingDuration--;
+        }
         return "";
     }
 }
